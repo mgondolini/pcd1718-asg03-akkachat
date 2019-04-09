@@ -6,16 +6,17 @@ import config.ActorConfig.ActorSystemInfo.system
 import controller.ChatRoomController
 import messages.ChatBehaviour.{QuitChat, SendMessage, SetController}
 
-class ChatRoomActor(_chatRoomController: ChatRoomController) extends Actor {
+class ChatRoomActor() extends Actor {
 
   val chatActor: ActorSelection = system actorSelection ChatActorPath
-  var chatRoomController: ChatRoomController = _chatRoomController
+  var chatRoomController: ChatRoomController = _
 
   override def receive: Receive = chatBehaviour
 
   private def chatBehaviour: Receive = {
     case SendMessage(message) => ???
-    case QuitChat() => ???
+      //mandare all'attore remoto
+    case QuitChat() => chatRoomController.exitChatView()
     case SetController(controller) => chatRoomController = controller
   }
 

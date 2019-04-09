@@ -6,6 +6,8 @@ object RoomsManagement {
 
   sealed trait RoomsManagement
 
+  case class RoomsList() extends RoomsManagement
+
   case class AddRoom(room: String) extends RoomsManagement
 
   case class RemoveRoom(room: String) extends RoomsManagement

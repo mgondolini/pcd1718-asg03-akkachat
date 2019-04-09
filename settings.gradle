@@ -1,0 +1,4 @@
+rootProject.name = 'pcd1718-asg03-akkachat'
+include 'client'
+include 'remote'
+

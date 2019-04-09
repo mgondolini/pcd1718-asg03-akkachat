@@ -8,7 +8,7 @@ import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.Alert.AlertType.NONE
 import javafx.scene.control._
-import messages.ChatManager.{EnterRoom, SetController}
+import messages.ChatAuthentication.{EnterRoom, SetController}
 import model.{User, ViewSwitch}
 
 
@@ -24,10 +24,10 @@ class Controller {
   def initialize(): Unit =  chatActor ! SetController(this)
 
   @FXML def enterRoom(): Unit = {
-    val username = User(usernameField.getText).username
-    username match {
+    val user = User(usernameField.getText)
+    user.username match {
       case "" => showDialog("Insert username")
-      case _ => chatActor ! EnterRoom(username)
+      case _ => chatActor ! EnterRoom(user)
     }
   }
 

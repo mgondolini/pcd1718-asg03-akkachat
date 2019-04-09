@@ -12,9 +12,7 @@ import config.ActorConfig.ActorSystemInfo.system
 class ClientMain extends Application {
 
     override def start(primaryStage: Stage): Unit = {
-
       val loader = new FXMLLoader()
-
       system actorOf(Props(new ChatActor(loader.getController.asInstanceOf[Controller])), "ChatActor")
 
       val root: Parent = loader.load(getClass.getClassLoader.getResource(mainView).openStream())

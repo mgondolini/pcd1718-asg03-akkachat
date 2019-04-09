@@ -15,16 +15,11 @@ object ActorConfig {
     val Name = "RemoteActor"
     val Path = "akka.tcp://akkachat@127.0.0.1:5051/user/RemoteActor"
   }
-//
-//  object BattleActorInfo{
-//    val Configuration = "actor/local_actor.conf"
-//    val Context = "LocalContext"
-//    val Name = "BattleActor"
-//  }
 
   object ActorPath {
-    val ChatActorPath = "/user/ChatActor"
-    val ChatRoomActorPath = "/user/ChatRoomActor"
+    val root = "akka://akkachat"
+    val ChatActorPath: String = root + "/user/ChatActor"
+    val ChatRoomActorPath: String = root + "/user/ChatRoomActor"
 
   }
 

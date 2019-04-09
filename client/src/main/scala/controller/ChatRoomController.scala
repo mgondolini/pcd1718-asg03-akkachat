@@ -19,13 +19,10 @@ class ChatRoomController {
   @FXML var messagesArea: TextArea = _
   @FXML var chatRoomLabel: Label = _
 
-  var user: User = _
-  var room: String = _
   val chatRoomActor: ActorSelection = system actorSelection ChatRoomActorPath
+  var user: User = _
 
-  def initialize(): Unit = {
-    chatRoomActor ! SetController(this)
-  }
+  def initialize(): Unit = chatRoomActor ! SetController(this)
 
   @FXML def sendMessage(): Unit = {
     val message = messageField.getText
@@ -34,7 +31,7 @@ class ChatRoomController {
         val alert = new Alert(ERROR, "Cannot send an empty message", ButtonType.OK)
         alert.showAndWait
       case _ =>
-        chatRoomActor ! SendMessage(message)
+        chatRoomActor ! SendMessage(message, user.username)
         messageField.clear()
     }
   }
@@ -42,8 +39,6 @@ class ChatRoomController {
   @FXML def quitChat(): Unit = chatRoomActor ! QuitChat()
 
   def setUser(_user: User): Unit = user = _user
-
-  def setRoom(_room: String): Unit = room = _room
 
   def exitChatView(): Unit = Platform.runLater(() => ViewSwitch(mainView, quitButton.getScene).changeView())
 }

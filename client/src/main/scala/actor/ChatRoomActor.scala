@@ -4,7 +4,8 @@ import akka.actor.{Actor, ActorSelection}
 import config.ActorConfig.ActorPath.ChatActorPath
 import config.ActorConfig.ActorSystemInfo.system
 import controller.ChatRoomController
-import messages.ChatBehaviour.{QuitChat, SendMessage, SetController}
+import messages.ChatAuthentication.UserRequest
+import messages.ChatBehaviour._
 
 class ChatRoomActor() extends Actor {
 
@@ -14,10 +15,13 @@ class ChatRoomActor() extends Actor {
   override def receive: Receive = chatBehaviour
 
   private def chatBehaviour: Receive = {
-    case SendMessage(message) => ???
-      //mandare all'attore remoto
+    case SetUser(user) => chatRoomController.setUser(user)
+    case SendMessage(message, username) => ???
+      //mandare cose all'attore remoto
     case QuitChat() => chatRoomController.exitChatView()
-    case SetController(controller) => chatRoomController = controller
+    case SetController(controller) =>
+      chatRoomController = controller
+      chatActor ! UserRequest()
   }
 
 }

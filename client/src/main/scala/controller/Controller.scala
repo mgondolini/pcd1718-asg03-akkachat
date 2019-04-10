@@ -3,7 +3,7 @@ package controller
 import akka.actor.ActorSelection
 import config.ActorConfig.ActorPath.AuthenticationActorPath
 import config.ActorConfig.ActorSystemInfo.system
-import config.ViewConfig.chatRoomView
+import config.Config.ViewConfig.chatRoomView
 import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.Alert.AlertType.NONE

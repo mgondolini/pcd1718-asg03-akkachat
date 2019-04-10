@@ -8,18 +8,14 @@ import controller.ChatRoomController
 import messages.ChatAuthentication.UserRequest
 import messages.ChatBehaviour._
 
+
 class ChatRoomActor() extends Actor {
 
   val authenticationActor: ActorSelection = system actorSelection AuthenticationActorPath
   var remoteActor: ActorSelection = _
   var chatRoomController: ChatRoomController = _
 
-
-  override def preStart(): Unit = {
-    remoteActor = context actorSelection RemoteActorInfo.Path
-    println(remoteActor)
-  }
-
+  override def preStart(): Unit = remoteActor = context actorSelection RemoteActorInfo.Path
   override def receive: Receive = chatRequest orElse chatResponse
 
   private def chatRequest: Receive = {
@@ -31,6 +27,7 @@ class ChatRoomActor() extends Actor {
       remoteActor ! AddParticipant(user.username)
     case SendMessage(message, username) => remoteActor ! MessageRequest(message, username)
     case QuitChat() => remoteActor ! RemoveParticipant(chatRoomController.user.username)
+    case CSrequest() => remoteActor ! CSaccepted()
   }
 
   private def chatResponse: Receive = {

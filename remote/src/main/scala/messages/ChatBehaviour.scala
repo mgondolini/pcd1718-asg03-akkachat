@@ -15,4 +15,10 @@ object ChatBehaviour {
   case class DispatchMessage(message: String, username: String) extends ChatBehaviour
 
   case class ExitSuccess() extends ChatBehaviour
+
+  case class CSrequest() extends ChatBehaviour
+
+  case class CSaccepted() extends ChatBehaviour
+
+  case class CSexit() extends ChatBehaviour
 }

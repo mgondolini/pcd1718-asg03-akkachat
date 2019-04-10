@@ -5,7 +5,7 @@ import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.config.{Config, ConfigFactory}
 import config.ActorConfig.ChatRoomActorInfo
 import config.ActorConfig.ChatRoomActorInfo.Name
-import config.ViewConfig.mainView
+import config.Config.ViewConfig.mainView
 import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.Alert.AlertType.ERROR

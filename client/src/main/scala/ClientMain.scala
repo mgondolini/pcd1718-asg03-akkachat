@@ -2,7 +2,7 @@
 import actor.AuthenticationActor
 import akka.actor.Props
 import config.ActorConfig.ActorSystemInfo.system
-import config.ViewConfig.mainView
+import config.Config.ViewConfig.mainView
 import controller.Controller
 import javafx.application.{Application, Platform}
 import javafx.fxml.FXMLLoader

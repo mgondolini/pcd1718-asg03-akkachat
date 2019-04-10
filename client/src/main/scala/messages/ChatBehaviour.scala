@@ -25,5 +25,11 @@ object ChatBehaviour {
 
   case class ExitSuccess() extends ChatBehaviour
 
+  case class CSrequest() extends ChatBehaviour
+
+  case class CSaccepted() extends ChatBehaviour
+
+  case class CSexit() extends ChatBehaviour
+
   case class SetController(controller: ChatRoomController) extends ChatBehaviour
 }

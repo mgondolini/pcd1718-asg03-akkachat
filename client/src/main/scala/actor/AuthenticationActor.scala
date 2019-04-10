@@ -1,8 +1,6 @@
 package actor
 
-import akka.actor.{Actor, ActorRef, Props}
-import config.ActorConfig.LocalSystemInfo.localSystem
-import config.ActorConfig.ChatRoomActorInfo.Name
+import akka.actor.Actor
 import controller.Controller
 import messages.ChatAuthentication.{EnterRoom, SetController, UserRequest}
 import messages.ChatBehaviour.SetUser
@@ -11,7 +9,6 @@ import model.User
 class AuthenticationActor(_controller: Controller) extends Actor{
 
   var chatController: Controller = _controller
-//  var chatRoomActor: ActorRef = localSystem.actorOf(Props[ChatRoomActor], name=Name)
 
   var user: User = _
 

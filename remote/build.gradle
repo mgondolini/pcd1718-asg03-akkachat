@@ -1,6 +1,5 @@
-apply plugin: 'application'
+apply plugin: 'scala'
 
-mainClassName = 'RemoteActor'
 
 dependencies {
     implementation 'org.scala-lang:scala-library:2.11.6'

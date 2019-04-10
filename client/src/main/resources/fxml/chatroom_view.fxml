@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="396.0" maxWidth="456.0" minHeight="396.0" minWidth="456.0" prefHeight="396.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatRoomController">
    <children>
-      <Label fx:id="chatRoomLabel" layoutX="22.0" layoutY="26.0" prefHeight="31.0" prefWidth="307.0">
+      <Label fx:id="chatRoomLabel" layoutX="22.0" layoutY="26.0" prefHeight="31.0" prefWidth="307.0" text="Akka Chat">
          <font>
             <Font name="System Italic" size="18.0" />
          </font></Label>

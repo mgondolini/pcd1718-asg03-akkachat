@@ -18,7 +18,7 @@ object ActorConfig {
 
   object ActorPath {
     val root = "akka://akkachat"
-    val ChatActorPath: String = root + "/user/ChatActor"
+    val AuthenticationActorPath: String = root + "/user/AuthenticationActor"
     val ChatRoomActorPath: String = root + "/user/ChatRoomActor"
 
   }

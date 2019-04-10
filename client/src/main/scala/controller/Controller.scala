@@ -1,7 +1,7 @@
 package controller
 
 import akka.actor.ActorSelection
-import config.ActorConfig.ActorPath.ChatActorPath
+import config.ActorConfig.ActorPath.AuthenticationActorPath
 import config.ActorConfig.ActorSystemInfo.system
 import config.ViewConfig.chatRoomView
 import javafx.application.Platform
@@ -19,15 +19,15 @@ class Controller {
   @FXML var chatNameField: TextField = _
   @FXML var roomsListView: ListView[String] = _
 
-  val chatActor: ActorSelection = system actorSelection ChatActorPath
+  val authenticationActor: ActorSelection = system actorSelection AuthenticationActorPath
 
-  def initialize(): Unit =  chatActor ! SetController(this)
+  def initialize(): Unit =  authenticationActor ! SetController(this)
 
   @FXML def enterRoom(): Unit = {
     val user = User(usernameField.getText)
     user.username match {
       case "" => showDialog("Insert username")
-      case _ => chatActor ! EnterRoom(user)
+      case _ => authenticationActor ! EnterRoom(user)
     }
   }
 

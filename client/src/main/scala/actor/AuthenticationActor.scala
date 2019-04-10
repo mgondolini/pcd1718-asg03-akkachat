@@ -6,7 +6,7 @@ import messages.ChatAuthentication.{EnterRoom, UserRequest, SetController}
 import messages.ChatBehaviour.SetUser
 import model.User
 
-class ChatActor(_controller: Controller) extends Actor{
+class AuthenticationActor(_controller: Controller) extends Actor{
 
   var chatController: Controller = _controller
   var chatRoomActor: ActorRef = context.system.actorOf(Props[ChatRoomActor], "ChatRoomActor")

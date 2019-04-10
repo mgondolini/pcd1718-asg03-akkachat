@@ -1,8 +1,10 @@
 package controller
 
-import akka.actor.ActorSelection
-import config.ActorConfig.ActorSystemInfo.system
+import actor.ChatRoomActor
+import akka.actor.{ActorRef, ActorSelection, Props}
+import config.ActorConfig.LocalSystemInfo.localSystem
 import config.ActorConfig.ActorPath.ChatRoomActorPath
+import config.ActorConfig.ChatRoomActorInfo.Name
 import config.ViewConfig.mainView
 import javafx.application.Platform
 import javafx.fxml.FXML
@@ -19,10 +21,13 @@ class ChatRoomController {
   @FXML var messagesArea: TextArea = _
   @FXML var chatRoomLabel: Label = _
 
-  val chatRoomActor: ActorSelection = system actorSelection ChatRoomActorPath
+  var chatRoomActor: ActorRef = localSystem actorOf(Props[ChatRoomActor], name=Name)
+
   var user: User = _
 
-  def initialize(): Unit = chatRoomActor ! SetController(this)
+  def initialize(): Unit = {
+    chatRoomActor ! SetController(this)
+  }
 
   @FXML def sendMessage(): Unit = {
     val message = messageField.getText

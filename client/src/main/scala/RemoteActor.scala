@@ -1,7 +1,8 @@
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props, Stash}
+import akka.actor.{Actor, ActorLogging, ActorRef, Props, Stash}
+import config.ActorConfig.RemoteActorInfo.Name
+import config.ActorConfig.RemoteSystemInfo.remoteSystem
 import messages.ChatBehaviour.{AddParticipant, DispatchMessage, MessageRequest, RemoveParticipant}
-import config.ActorConfig.RemoteActorInfo.{Configuration,Context, Name}
 
 import scala.collection.mutable.ListBuffer
 
@@ -11,9 +12,9 @@ class RemoteActor extends Actor with Stash with ActorLogging{
   private var participants: ListBuffer[String] = new ListBuffer[String]
 
   override def receive: Receive = {
-    case AddParticipant(username) => addIntoParticipantsList(sender, username)
+    case AddParticipant(username) => addIntoParticipantsList(sender(), username)
     case MessageRequest(message, username) => actorList.foreach{ actor => actor ! DispatchMessage(message, username) }
-    case RemoveParticipant(username) => removeFromParticipantsList(self, username)
+    case RemoveParticipant(username) => removeFromParticipantsList(sender(), username)
     case _ => stash()
   }
 
@@ -35,11 +36,7 @@ class RemoteActor extends Actor with Stash with ActorLogging{
 
 object RemoteActor {
   def main(args: Array[String])  {
-    import com.typesafe.config.ConfigFactory
-    val config = ConfigFactory.load(Configuration)
-    val system = ActorSystem(Context, config)
-    val remoteActor = system.actorOf(Props[RemoteActor], name=Name)
+    remoteSystem.actorOf(Props[RemoteActor], name=Name)
     println("------ cml.RemoteActor is ready")
-    println(akka.serialization.Serialization.serializedActorPath(remoteActor))
   }
 }

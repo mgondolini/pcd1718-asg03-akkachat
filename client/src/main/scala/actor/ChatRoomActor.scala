@@ -3,6 +3,7 @@ package actor
 import akka.actor.{Actor, ActorSelection}
 import config.ActorConfig.ActorPath.AuthenticationActorPath
 import config.ActorConfig.ActorSystemInfo.system
+import config.ActorConfig.RemoteSystemInfo.remoteSystem
 import config.ActorConfig.RemoteActorInfo
 import controller.ChatRoomController
 import messages.ChatAuthentication.UserRequest
@@ -11,8 +12,15 @@ import messages.ChatBehaviour._
 class ChatRoomActor() extends Actor {
 
   val authenticationActor: ActorSelection = system actorSelection AuthenticationActorPath
-  val remoteActor: ActorSelection = system actorSelection RemoteActorInfo.Path
+  var remoteActor: ActorSelection = _
   var chatRoomController: ChatRoomController = _
+
+
+  @throws[Exception](classOf[Exception])
+  override def preStart(): Unit = {
+    remoteActor = context actorSelection RemoteActorInfo.Path
+    println(remoteActor)
+  }
 
   override def receive: Receive = chatBehaviour
 

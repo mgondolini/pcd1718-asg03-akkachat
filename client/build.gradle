@@ -1,15 +1,6 @@
-group 'pcd1718-asg03-akkachat'
-version '1.0'
+apply plugin: 'application'
 
-apply plugin: 'java'
-apply plugin: 'scala'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-    jcenter()
-}
+mainClassName = 'ClientMain'
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'

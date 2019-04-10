@@ -20,18 +20,21 @@ class ChatRoomActor() extends Actor {
     println(remoteActor)
   }
 
-  override def receive: Receive = chatBehaviour
+  override def receive: Receive = chatRequest orElse chatResponse
 
-  private def chatBehaviour: Receive = {
+  private def chatRequest: Receive = {
     case SetController(controller) =>
       chatRoomController = controller
       authenticationActor ! UserRequest()
     case SetUser(user) =>
-      println(user)
       chatRoomController.setUser(user)
       remoteActor ! AddParticipant(user.username)
     case SendMessage(message, username) => remoteActor ! MessageRequest(message, username)
-    case QuitChat() => chatRoomController.exitChatView()
+    case QuitChat() => remoteActor ! RemoveParticipant(chatRoomController.user.username)
+  }
+
+  private def chatResponse: Receive = {
+    case ExitSuccess() => chatRoomController.exitChatView()
     case DispatchMessage(message, username) => chatRoomController.displayMessage(username+": "+message)
   }
 

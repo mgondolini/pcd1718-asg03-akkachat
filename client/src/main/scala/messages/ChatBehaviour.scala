@@ -23,5 +23,7 @@ object ChatBehaviour {
 
   case class QuitChat() extends ChatBehaviour
 
+  case class ExitSuccess() extends ChatBehaviour
+
   case class SetController(controller: ChatRoomController) extends ChatBehaviour
 }

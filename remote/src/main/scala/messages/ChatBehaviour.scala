@@ -13,4 +13,6 @@ object ChatBehaviour {
   case class MessageRequest(message: String, username: String) extends ChatBehaviour
 
   case class DispatchMessage(message: String, username: String) extends ChatBehaviour
+
+  case class ExitSuccess() extends ChatBehaviour
 }

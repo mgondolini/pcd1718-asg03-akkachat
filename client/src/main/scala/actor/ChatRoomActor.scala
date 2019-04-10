@@ -17,15 +17,15 @@ class ChatRoomActor() extends Actor {
   override def receive: Receive = chatBehaviour
 
   private def chatBehaviour: Receive = {
-    case SetUser(user) =>
-      chatRoomController.setUser(user)
-      remoteActor ! Participant(user.username)
-    case SendMessage(message, username) => ???
-      //mandare cose all'attore remoto
-    case QuitChat() => chatRoomController.exitChatView()
     case SetController(controller) =>
       chatRoomController = controller
       authenticationActor ! UserRequest()
+    case SetUser(user) =>
+      chatRoomController.setUser(user)
+      remoteActor ! AddParticipant(user.username)
+    case SendMessage(message, username) => remoteActor ! MessageRequest(message, username)
+    case QuitChat() => chatRoomController.exitChatView()
+    case DispatchMessage(message, username) => chatRoomController.messagesArea.setText(username+": "+message)
   }
 
 }

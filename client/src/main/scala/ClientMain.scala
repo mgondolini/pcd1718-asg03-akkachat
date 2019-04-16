@@ -2,6 +2,7 @@
 import actor.AuthenticationActor
 import akka.actor.Props
 import config.ActorConfig.ActorSystemInfo.system
+import config.ActorConfig.RemoteActorInfo
 import config.Config.ViewConfig.mainView
 import controller.Controller
 import javafx.application.{Application, Platform}
@@ -13,7 +14,7 @@ class ClientMain extends Application {
 
     override def start(primaryStage: Stage): Unit = {
       val loader = new FXMLLoader()
-      system actorOf(Props(new AuthenticationActor(loader.getController.asInstanceOf[Controller])), "AuthenticationActor")
+      val authenticationActor = system actorOf(Props(new AuthenticationActor(loader.getController.asInstanceOf[Controller])), "AuthenticationActor")
 
       val root: Parent = loader.load(getClass.getClassLoader.getResource(mainView).openStream())
       val scene : Scene = new Scene(root)

@@ -1,6 +1,6 @@
 package messages
 
-import controller.ChatRoomController
+import controller.ChatController
 import model.User
 
 object ChatBehaviour {
@@ -25,11 +25,9 @@ object ChatBehaviour {
 
   case class ExitSuccess() extends ChatBehaviour
 
-  case class CSrequest() extends ChatBehaviour
+  case class CSrequest(username: String) extends ChatBehaviour
 
-  case class CSaccepted() extends ChatBehaviour
+  case class CSaccepted(username: String) extends ChatBehaviour
 
-  case class CSexit() extends ChatBehaviour
-
-  case class SetController(controller: ChatRoomController) extends ChatBehaviour
+  case class SetController(controller: ChatController) extends ChatBehaviour
 }

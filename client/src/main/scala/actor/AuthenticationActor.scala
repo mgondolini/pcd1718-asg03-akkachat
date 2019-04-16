@@ -9,12 +9,9 @@ import model.User
 class AuthenticationActor(_controller: Controller) extends Actor{
 
   var chatController: Controller = _controller
-
   var user: User = _
 
-  override def receive: Receive = roomManagement
-
-  private def roomManagement: Receive = {
+  override def receive: Receive = {
     case EnterRoom(_user) =>
       chatController.openChatView()
       user = _user

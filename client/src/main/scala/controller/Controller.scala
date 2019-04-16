@@ -37,4 +37,6 @@ class Controller {
   }
 
   def openChatView(): Unit = Platform.runLater(() => ViewSwitch(chatRoomView, enterButton.getScene).changeView())
+
+  
 }

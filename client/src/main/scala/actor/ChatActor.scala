@@ -1,5 +1,8 @@
 package actor
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import akka.actor.{Actor, ActorSelection}
 import config.ActorConfig.ActorPath.AuthenticationActorPath
 import config.ActorConfig.ActorSystemInfo.system
@@ -30,14 +33,16 @@ class ChatActor() extends Actor {
       setUser(user)
       chatController.setUser(user)
       remoteActor ! AddParticipant(user.username)
-    case SendMessage(message, username) => remoteActor ! MessageRequest(message, username)
+    case SendMessage(message, username) =>
+      val timestamp = new SimpleDateFormat("HH.mm.ss").format(new Date)
+      remoteActor ! MessageRequest(message, username, timestamp)
     case QuitChat() => remoteActor ! RemoveParticipant(chatController.user.username)
     case CSrequest(username) => remoteActor ! CSaccepted(username)
   }
 
   private def chatResponse: Receive = {
     case ExitSuccess() => chatController.exitChatView()
-    case DispatchMessage(message, username) => chatController.displayMessage(username+": "+message)
+    case DispatchMessage(message, username, timestamp) => chatController.displayMessage(username+": "+message+ "\t\t" + timestamp)
   }
 
   def setUser(_user: User): Unit = chatUser = _user

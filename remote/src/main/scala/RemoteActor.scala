@@ -20,11 +20,11 @@ class RemoteActor extends Actor with Stash{
 
   override def receive: Receive = {
     case AddParticipant(username) => addToParticipantsList(sender, username)
-    case MessageRequest(message, username) => examineMessage(message, username)
+    case MessageRequest(message, username, timestamp) => examineMessage(message, username, timestamp)
     case CSaccepted(username) =>
       for(_ <- actorList)
         count += 1
-      
+
       if(count == actorList.size){
         cs = true
         setCSuser(Some(username))
@@ -50,7 +50,7 @@ class RemoteActor extends Actor with Stash{
 
   private def setCSuser(username: Option[String]): Unit = CSuser = username
 
-  private def examineMessage(message: String, username: String): Unit = {
+  private def examineMessage(message: String, username: String, timestamp: String): Unit = {
     message match {
       case `enterCS` =>
         println(enterCS)
@@ -61,8 +61,8 @@ class RemoteActor extends Actor with Stash{
         cs = false
         setCSuser(None)
       case _ =>
-        if (cs && CSuser.get.equals(username)) actorList foreach{actor => actor ! DispatchMessage(message, username)}
-        else if (!cs && CSuser.isEmpty) actorList foreach{actor => actor ! DispatchMessage(message,username)}
+        if (cs && CSuser.get.equals(username)) actorList foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
+        else if (!cs && CSuser.isEmpty) actorList foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
         else stash()
     }
   }

@@ -10,6 +10,9 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.{Parent, Scene}
 import javafx.stage.Stage
 
+/**
+  * @author Monica Gondolini
+  */
 class ClientMain extends Application {
 
     override def start(primaryStage: Stage): Unit = {

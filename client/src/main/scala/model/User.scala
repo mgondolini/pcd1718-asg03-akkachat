@@ -1,5 +1,8 @@
 package model
 
+/**
+  * @author Monica Gondolini
+  */
 trait Credentials{
   def username: String
   def setUsername(username: String): Unit

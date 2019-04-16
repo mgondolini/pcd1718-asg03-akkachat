@@ -6,6 +6,9 @@ import messages.ChatAuthentication.{EnterRoom, SetController, UserRequest}
 import messages.ChatBehaviour.SetUser
 import model.User
 
+/**
+  * @author Monica Gondolini
+  */
 class AuthenticationActor(_controller: Controller) extends Actor{
 
   var chatController: Controller = _controller

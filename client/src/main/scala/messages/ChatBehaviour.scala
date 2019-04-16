@@ -3,6 +3,10 @@ package messages
 import controller.ChatController
 import model.User
 
+/**
+  * @author Monica Gondolini
+  */
+
 object ChatBehaviour {
 
   sealed trait ChatBehaviour

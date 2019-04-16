@@ -1,5 +1,8 @@
 package messages
 
+/**
+  * @author Monica Gondolini
+  */
 object ChatBehaviour {
 
   sealed trait ChatBehaviour

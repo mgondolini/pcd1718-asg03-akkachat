@@ -3,6 +3,10 @@ package model
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 
+/**
+  * @author Monica Gondolini
+  */
+
 trait Switch{
   def changeView(): Unit
 }

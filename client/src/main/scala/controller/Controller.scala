@@ -11,7 +11,9 @@ import javafx.scene.control._
 import messages.ChatAuthentication.{EnterRoom, SetController}
 import model.{User, ViewSwitch}
 
-
+/**
+  * @author Monica Gondolini
+  */
 class Controller {
 
   @FXML var enterButton: Button = _
@@ -38,5 +40,5 @@ class Controller {
 
   def openChatView(): Unit = Platform.runLater(() => ViewSwitch(chatRoomView, enterButton.getScene).changeView())
 
-  
+
 }

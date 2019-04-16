@@ -1,17 +1,20 @@
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props, Stash}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props, Stash}
 import com.typesafe.config.{Config, ConfigFactory}
 import config.ActorConfig.RemoteActorInfo
-import config.Config.{enterCS,exitCS}
+import config.Config.{enterCS, exitCS}
 import messages.ChatBehaviour._
 
 import scala.collection.mutable.ListBuffer
 
+/**
+  * @author Monica Gondolini
+  */
 class RemoteActor extends Actor with Stash{
 
   private var actorList: ListBuffer[ActorRef] = new ListBuffer[ActorRef]
   private var participants: ListBuffer[String] = new ListBuffer[String]
-  private var CSuser: String = ""
+  private var CSuser: Option[String] = None
   private var cs: Boolean = false
   private var count: Int = 0
 
@@ -19,14 +22,12 @@ class RemoteActor extends Actor with Stash{
     case AddParticipant(username) => addToParticipantsList(sender, username)
     case MessageRequest(message, username) => examineMessage(message, username)
     case CSaccepted(username) =>
-      for(_ <- actorList){
+      for(_ <- actorList)
         count += 1
-        println(count)
-      }
+      
       if(count == actorList.size){
-        println(count+ " equals actorlist.size")
         cs = true
-        setCSuser(username)
+        setCSuser(Some(username))
       }
     case RemoveParticipant(username) =>
       removeFromParticipantsList(sender, username)
@@ -45,24 +46,23 @@ class RemoteActor extends Actor with Stash{
     println("User in list (remove option) -> " + actorInList + "-" + participants)
   }
 
-  private def actorInList():  ListBuffer[ActorRef]  = actorList
+  private def actorInList(): ListBuffer[ActorRef]  = actorList
 
-  private def setCSuser(username: String): Unit = CSuser = username
+  private def setCSuser(username: Option[String]): Unit = CSuser = username
 
   private def examineMessage(message: String, username: String): Unit = {
     message match {
       case `enterCS` =>
-        println("enterCS")
+        println(enterCS)
         actorList foreach{ actor => actor ! CSrequest(username)}
       case `exitCS` =>
-        println("exitcs")
+        println(exitCS)
         count = 0
         cs = false
-        setCSuser("")
-//        unstashAll()
+        setCSuser(None)
       case _ =>
-        if (cs && CSuser == username) actorList foreach { actor => actor ! DispatchMessage(message, username)}
-        else if (CSuser == "" && !cs) actorList foreach{actor => actor ! DispatchMessage(message,username)}
+        if (cs && CSuser.get.equals(username)) actorList foreach{actor => actor ! DispatchMessage(message, username)}
+        else if (!cs && CSuser.isEmpty) actorList foreach{actor => actor ! DispatchMessage(message,username)}
         else stash()
     }
   }

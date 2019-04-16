@@ -14,7 +14,9 @@ import javafx.stage.Stage
 import messages.ChatBehaviour.{QuitChat, SendMessage, SetController}
 import model.{User, ViewSwitch}
 
-
+/**
+  * @author Monica Gondolini
+  */
 class ChatController {
 
   @FXML var anchorPane: AnchorPane = _

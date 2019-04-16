@@ -3,6 +3,9 @@ package messages
 import controller.Controller
 import model.User
 
+/**
+  * @author Monica Gondolini
+  */
 object ChatAuthentication {
 
   sealed trait ChatAuthentication

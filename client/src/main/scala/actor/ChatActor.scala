@@ -9,7 +9,9 @@ import messages.ChatAuthentication.UserRequest
 import messages.ChatBehaviour._
 import model.User
 
-
+/**
+  * @author Monica Gondolini
+  */
 class ChatActor() extends Actor {
 
   val authenticationActor: ActorSelection = system actorSelection AuthenticationActorPath
@@ -30,9 +32,7 @@ class ChatActor() extends Actor {
       remoteActor ! AddParticipant(user.username)
     case SendMessage(message, username) => remoteActor ! MessageRequest(message, username)
     case QuitChat() => remoteActor ! RemoveParticipant(chatController.user.username)
-    case CSrequest(username) =>
-      //TODO timestamp
-      remoteActor ! CSaccepted(username)
+    case CSrequest(username) => remoteActor ! CSaccepted(username)
   }
 
   private def chatResponse: Receive = {

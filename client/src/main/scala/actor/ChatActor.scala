@@ -9,7 +9,8 @@ import config.ActorConfig.ActorSystemInfo.system
 import config.ActorConfig.RemoteActorInfo
 import controller.ChatController
 import messages.ChatAuthentication.UserRequest
-import messages.ChatBehaviour._
+import messages.ChatRequest._
+import messages.ChatResponse.{CSaccepted, DispatchMessage, ExitSuccess}
 import model.User
 
 /**
@@ -20,9 +21,9 @@ class ChatActor() extends Actor {
   val authenticationActor: ActorSelection = system actorSelection AuthenticationActorPath
   var remoteActor: ActorSelection = _
   var chatController: ChatController = _
-  var chatUser: User = _
 
   override def preStart(): Unit = remoteActor = context actorSelection RemoteActorInfo.Path
+
   override def receive: Receive = chatRequest orElse chatResponse
 
   private def chatRequest: Receive = {
@@ -30,9 +31,8 @@ class ChatActor() extends Actor {
       chatController = controller
       authenticationActor ! UserRequest()
     case SetUser(user) =>
-      setUser(user)
       chatController.setUser(user)
-      remoteActor ! AddParticipant(user.username)
+      remoteActor ! AddParticipant()
     case SendMessage(message, username) =>
       val timestamp = new SimpleDateFormat("HH.mm.ss").format(new Date)
       remoteActor ! MessageRequest(message, username, timestamp)
@@ -44,7 +44,5 @@ class ChatActor() extends Actor {
     case ExitSuccess() => chatController.exitChatView()
     case DispatchMessage(message, username, timestamp) => chatController.displayMessage(username+": "+message+ "\t\t" + timestamp)
   }
-
-  def setUser(_user: User): Unit = chatUser = _user
 
 }

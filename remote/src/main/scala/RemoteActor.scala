@@ -3,7 +3,8 @@ import akka.actor.{Actor, ActorRef, ActorSystem, Props, Stash}
 import com.typesafe.config.{Config, ConfigFactory}
 import config.ActorConfig.RemoteActorInfo
 import config.Config.{enterCS, exitCS}
-import messages.ChatBehaviour._
+import messages.ChatRequest.{AddParticipant, CSrequest, MessageRequest, RemoveParticipant}
+import messages.ChatResponse.{CSaccepted, DispatchMessage, ExitSuccess}
 
 import scala.collection.mutable.ListBuffer
 
@@ -12,58 +13,66 @@ import scala.collection.mutable.ListBuffer
   */
 class RemoteActor extends Actor with Stash{
 
-  private var actorList: ListBuffer[ActorRef] = new ListBuffer[ActorRef]
-  private var participants: ListBuffer[String] = new ListBuffer[String]
+  private var participants: ListBuffer[ActorRef] = new ListBuffer[ActorRef]
   private var CSuser: Option[String] = None
   private var cs: Boolean = false
   private var count: Int = 0
 
   override def receive: Receive = {
-    case AddParticipant(username) => addToParticipantsList(sender, username)
+    case AddParticipant() => addToParticipantsList(sender)
     case MessageRequest(message, username, timestamp) => examineMessage(message, username, timestamp)
     case CSaccepted(username) =>
-      for(_ <- actorList)
+      for(_ <- participants)
         count += 1
-
-      if(count == actorList.size){
-        cs = true
-        setCSuser(Some(username))
-      }
+      if(count == participants.size)
+        setCS(username)
     case RemoveParticipant(username) =>
-      removeFromParticipantsList(sender, username)
+      removeFromParticipantsList(sender)
+      unsetCS(username)
       sender ! ExitSuccess()
   }
 
-  private def addToParticipantsList(actorIdentity: ActorRef, username: String){
-    actorList += actorIdentity
-    participants += username
-    println("User in list (add option) -> " + actorInList + "-" + participants)
+  private def addToParticipantsList(actorIdentity: ActorRef){
+    participants += actorIdentity
+    println("User in list (add option) -> " + actorInList)
   }
 
-  private def removeFromParticipantsList(actorIdentity: ActorRef, username: String) {
-    actorList -= actorIdentity
-    participants -= username
-    println("User in list (remove option) -> " + actorInList + "-" + participants)
+  private def removeFromParticipantsList(actorIdentity: ActorRef) {
+    participants -= actorIdentity
+    println("User in list (remove option) -> " + actorInList)
   }
-
-  private def actorInList(): ListBuffer[ActorRef]  = actorList
-
-  private def setCSuser(username: Option[String]): Unit = CSuser = username
 
   private def examineMessage(message: String, username: String, timestamp: String): Unit = {
     message match {
       case `enterCS` =>
-        println(enterCS)
-        actorList foreach{ actor => actor ! CSrequest(username)}
+        println(enterCS+": "+username)
+        participants foreach{actor => actor ! CSrequest(username)}
       case `exitCS` =>
-        println(exitCS)
+        println(exitCS+": "+username)
         count = 0
         cs = false
         setCSuser(None)
       case _ =>
-        if (cs && CSuser.get.equals(username)) actorList foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
-        else if (!cs && CSuser.isEmpty) actorList foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
+        if (cs && CSuser.get.equals(username)) participants foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
+        else if (!cs && CSuser.isEmpty) participants foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
         else stash()
+    }
+  }
+
+  private def actorInList(): ListBuffer[ActorRef]  = participants
+
+  private def setCSuser(username: Option[String]): Unit = CSuser = username
+
+  private def setCS(username:String): Unit = {
+    cs = true
+    setCSuser(Some(username))
+  }
+
+  private def unsetCS(username:String): Unit = {
+    if (cs && CSuser.get.equals(username)){
+      count = 0
+      cs = false
+      setCSuser(None)
     }
   }
 }
@@ -72,6 +81,6 @@ object RemoteActor {
   def main(args: Array[String])  {
     val config: Config = ConfigFactory.load(RemoteActorInfo.Configuration)
     val system = ActorSystem(RemoteActorInfo.Context, config)
-    system.actorOf(Props[RemoteActor], name=RemoteActorInfo.Name)
+    system.actorOf(Props[RemoteActor], name = RemoteActorInfo.Name)
   }
 }

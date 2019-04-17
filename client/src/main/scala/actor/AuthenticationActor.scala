@@ -3,7 +3,7 @@ package actor
 import akka.actor.Actor
 import controller.Controller
 import messages.ChatAuthentication.{EnterRoom, SetController, UserRequest}
-import messages.ChatBehaviour.SetUser
+import messages.ChatRequest.SetUser
 import model.User
 
 /**

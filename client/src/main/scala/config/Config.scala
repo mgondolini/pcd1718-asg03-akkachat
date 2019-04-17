@@ -10,6 +10,7 @@ object Config {
   object CSconfig{
     val enterCS: String = "enter-cs"
     val exitCS: String = "exit-cs"
+    val CScommands: String = "cs commands: enter-cs, exit-cs\n"
   }
 
 }

@@ -5,13 +5,14 @@ import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.config.{Config, ConfigFactory}
 import config.ActorConfig.ChatActorInfo
 import config.Config.ViewConfig.mainView
+import config.Config.CSconfig.CScommands
 import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.Alert.AlertType.ERROR
 import javafx.scene.control._
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
-import messages.ChatBehaviour.{QuitChat, SendMessage, SetController}
+import messages.ChatRequest.{QuitChat, SendMessage, SetController}
 import model.{User, ViewSwitch}
 
 /**
@@ -33,8 +34,8 @@ class ChatController {
 
   def initialize(): Unit = {
     chatActor ! SetController(this)
-
-    Platform.runLater(() =>{
+    displayMessage(CScommands)
+    Platform.runLater(() => {
       val stage: Stage = anchorPane.getScene.getWindow.asInstanceOf[Stage]
       closeStage(stage)
     })

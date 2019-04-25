@@ -28,7 +28,8 @@ class RemoteActor extends Actor with Stash{
         setCS(username)
     case RemoveParticipant(username) =>
       removeFromParticipantsList(sender)
-      unsetCS(username)
+      if (cs && CSuser.get.equals(username))
+        unsetCS()
       sender ! ExitSuccess()
   }
 
@@ -49,9 +50,7 @@ class RemoteActor extends Actor with Stash{
         participants foreach{actor => actor ! CSrequest(username)}
       case `exitCS` =>
         println(exitCS+": "+username)
-        count = 0
-        cs = false
-        setCSuser(None)
+        unsetCS()
       case _ =>
         if (cs && CSuser.get.equals(username)) participants foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
         else if (!cs && CSuser.isEmpty) participants foreach{actor => actor ! DispatchMessage(message, username, timestamp)}
@@ -68,12 +67,10 @@ class RemoteActor extends Actor with Stash{
     setCSuser(Some(username))
   }
 
-  private def unsetCS(username:String): Unit = {
-    if (cs && CSuser.get.equals(username)){
-      count = 0
-      cs = false
-      setCSuser(None)
-    }
+  private def unsetCS(): Unit = {
+    count = 0
+    cs = false
+    setCSuser(None)
   }
 }
 

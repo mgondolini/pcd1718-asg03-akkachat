@@ -11,15 +11,15 @@ import model.User
   */
 class AuthenticationActor(_controller: Controller) extends Actor{
 
-  var chatController: Controller = _controller
+  var authenticationController: Controller = _controller
   var user: User = _
 
   override def receive: Receive = {
     case EnterRoom(_user) =>
-      chatController.openChatView()
+      authenticationController.openChatView()
       user = _user
     case UserRequest() => sender ! SetUser(user)
-    case SetController(controller) => chatController = controller
+    case SetController(controller) => authenticationController = controller
   }
 
 }

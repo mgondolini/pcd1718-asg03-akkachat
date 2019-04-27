@@ -23,7 +23,7 @@ object ChatRequest {
 
   case class QuitChat() extends ChatRequest
 
-  case class CSrequest(username: String) extends ChatRequest
+  case class CSrequest(username: String, timestamp: String) extends ChatRequest
 
   case class SetController(controller: ChatController) extends ChatRequest
 }

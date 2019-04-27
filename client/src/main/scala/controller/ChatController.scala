@@ -48,7 +48,9 @@ class ChatController {
         val alert = new Alert(ERROR, "Cannot send an empty message", ButtonType.OK)
         alert.showAndWait
       case _ =>
-        chatActor ! SendMessage(message, user.username)
+        for(i<- 1 to 3){
+          chatActor ! SendMessage(message, user.username)
+        }
         messageField.clear()
     }
   }

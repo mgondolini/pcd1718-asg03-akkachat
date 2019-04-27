@@ -13,6 +13,6 @@ object ChatRequest {
 
   case class MessageRequest(message: String, username: String, timestamp: String) extends ChatRequest
 
-  case class CSrequest(username: String) extends ChatRequest
+  case class CSrequest(username: String, timestamp: String) extends ChatRequest
 
 }
